@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data>
+		<record id="maintenance_period_form_view" model="ir.ui.view">
+            <field name="name">maintenance.period.form.view</field>
+            <field name="model">rent.type</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+					<sheet>
+						<group>
+							<group><field name="name"/></group>
+							<group>
+								<div>
+									<b><span style="padding-right:15px;">Repeat every </span></b><field name="repeat_number" class="oe_inline"/> months
+								</div>
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+        <record model="ir.ui.view" id="rent_type_tree_view">
+			<field name="name">rent.type.tree.view</field>
+			<field name="model">rent.type</field>
+			<field name="priority">10</field>
+			<field name="arch" type="xml">
+				<tree string='Rent Periods'>
+					<field name="name"/>
+					<field name="repeat_number"/>
+           		</tree>
+			</field>
+		</record>
+
+        <record model="ir.actions.act_window" id="action_rent_type">
+			<field name="name">Rent Periods</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">rent.type</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="rent_type_tree_view"/>
+		</record>
+
+    </data>
+</openerp>

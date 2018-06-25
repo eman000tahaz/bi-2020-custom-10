@@ -1,0 +1,140 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* cheque_management
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-10-27 11:51+0000\n"
+"PO-Revision-Date: 2017-10-27 14:03+0200\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"Language: ar_EG\n"
+"X-Generator: Poedit 2.0.3\n"
+
+#. module: cheque_management
+#: model:ir.ui.view,arch_db:cheque_management.cheque_view_tree
+msgid "Amount"
+msgstr "المبلغ"
+
+#. module: cheque_management
+#: model:ir.ui.view,arch_db:cheque_management.cheque_create_view
+msgid "Cheque Amount"
+msgstr "قيمة الشيك"
+
+#. module: cheque_management
+#: model:ir.ui.view,arch_db:cheque_management.cheque_create_view
+msgid "Cheque Date"
+msgstr "تاريخ الشيك"
+
+#. module: cheque_management
+#: model:ir.ui.view,arch_db:cheque_management.cheque_create_view
+#: model:ir.ui.view,arch_db:cheque_management.cheque_view_tree
+msgid "Cheque No."
+msgstr "رقم الشيك."
+
+#. module: cheque_management
+#: model:ir.ui.view,arch_db:cheque_management.cheque_view_tree
+msgid "Cheques"
+msgstr "الشيكات"
+
+#. module: cheque_management
+#: model:ir.ui.menu,name:cheque_management.menu_cheques
+msgid "Cheques Management"
+msgstr "ادارة الشيكات"
+
+#. module: cheque_management
+#: model:ir.ui.menu,name:cheque_management.menu_cheques_history
+msgid "Cheques history"
+msgstr "سجل الشيكات"
+
+#. module: cheque_management
+#: model:ir.actions.act_window,name:cheque_management.cheque_received_list_action
+#: model:ir.ui.menu,name:cheque_management.menu_cheque_received_action
+msgid "Receipt Voucher"
+msgstr "شيكات مستلمة"
+
+#. module: cheque_management
+#: model:ir.actions.act_window,name:cheque_management.cheque_sent_list_action
+#: model:ir.ui.menu,name:cheque_management.menu_cheque_sent_action
+msgid "Payment Voucher"
+msgstr "شيكات مرسلة"
+
+#. module: cheque_management
+#: model:ir.model.fields,field_description:cheque_management.field_account_journal_jrnl_is_cheque
+msgid "Cheques?"
+msgstr "شيك؟"
+
+#. module: cheque_management
+#: model:ir.ui.view,arch_db:cheque_management.cheque_create_view
+msgid "Confirm"
+msgstr "تأكيد"
+
+#. module: cheque_management
+#: model:ir.model.fields,field_description:cheque_management.field_account_move_line_aml_is_cheque
+#: model:ir.model.fields,field_description:cheque_management.field_account_payment_is_cheque
+msgid "Is Cheque"
+msgstr "شيك؟"
+
+#. module: cheque_management
+#: model:ir.model,name:cheque_management.model_account_journal
+#: model:ir.model.fields,field_description:cheque_management.field_account_payment_cheque_journal_id
+#: model:ir.ui.view,arch_db:cheque_management.cheque_create_view
+msgid "Journal"
+msgstr "يومية"
+
+#. module: cheque_management
+#: model:ir.model,name:cheque_management.model_account_move_line
+msgid "Journal Item"
+msgstr "عنصر يومية"
+
+#. module: cheque_management
+#: model:ir.model.fields,help:cheque_management.field_account_journal_jrnl_is_cheque
+msgid ""
+"On Cash/Misc journals this will be a Cheques wallet. \n"
+"    On Bank accounts, this will mean that you have Chequebook from this bank.    "
+msgstr ""
+"يعني انه لديك دفتر شيكات في حالة يوميات النقدية او البنك. \n"
+"أما في حالة يوميات النقدية او العامه يقصد به ان اليومية تعبر عن حافظة شيكات."
+
+#. module: cheque_management
+#: model:ir.model,name:cheque_management.model_account_payment
+msgid "Payments"
+msgstr "مدفوعات"
+
+#. module: cheque_management
+#: model:ir.ui.view,arch_db:cheque_management.cheque_create_view
+msgid "Receive Cheque"
+msgstr "استلام شيك"
+
+#. module: cheque_management
+#: model:ir.actions.act_window,name:cheque_management.cheque_receive_action
+#: model:ir.ui.menu,name:cheque_management.menu_cheque_receive_action
+msgid "Receipt Voucher"
+msgstr "استلام شيك"
+
+#. module: cheque_management
+#: model:ir.ui.menu,name:cheque_management.menu_cheques_register
+msgid "Register Cheques"
+msgstr "تسجيل الشيكات"
+
+#. module: cheque_management
+#: model:ir.actions.act_window,name:cheque_management.cheque_send_action
+#: model:ir.ui.menu,name:cheque_management.menu_cheque_send_action
+msgid "Payment Voucher"
+msgstr "ارسال شيك"
+
+#. module: cheque_management
+#: model:ir.ui.view,arch_db:cheque_management.cheque_view_tree
+msgid "Status"
+msgstr "الحاله"
+
+#. module: cheque_management
+#: sql_constraint:account.payment:0
+msgid "The cheque number must be unique.!"
+msgstr "رقم الشيك يجب ان يكون فريد ولم يستخدم من قبل.!"

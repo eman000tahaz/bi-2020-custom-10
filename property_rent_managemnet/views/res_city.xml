@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+
+        <!-- City tree view -->
+        <record model="ir.ui.view" id="res_city_tree_view">
+			<field name="name">res.city.tree.view</field>
+			<field name="model">res.city</field>
+			<field name="priority">10</field>
+			<field name="arch" type="xml">
+				<tree string='City'>
+					<field name="name"/>
+           		</tree>
+			</field>
+		</record>
+
+        <!-- City action -->
+		<record model="ir.actions.act_window" id="view_res_city_action">
+			<field name="name">City</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">res.city</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="res_city_tree_view"/>
+		</record>
+
+        <!-- City menuitem -->
+        <menuitem id="property_city" name="Cities" sequence="1" parent="property_rent_managemnet.property_conf" action="view_res_city_action"/>
+
+   </data>
+</odoo>

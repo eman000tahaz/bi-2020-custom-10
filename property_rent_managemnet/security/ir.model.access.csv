@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_rental_property,rental.property,model_rental_property,group_rental_admin,1,1,1,1
+access_rental_unit,rental.unit,model_rental_unit,group_rental_admin,1,1,1,1
+access_rental_tenant,rental.tenant,model_rental_tenant,group_rental_admin,1,1,1,1
+access_rental_occupation,rental.occupation,model_rental_occupation,group_rental_admin,1,1,1,1
+access_rental_bill,rental.bill,model_rental_bill,group_rental_admin,1,1,1,1
+access_rental_payment,rental.payment,model_rental_payment,group_rental_admin,1,1,1,1

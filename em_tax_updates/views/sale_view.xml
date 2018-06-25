@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	
+	<record id="view_order_form_add_tax_amnt" model="ir.ui.view">
+		<field name="name">add tax amt</field>
+		<field name="model">sale.order</field>
+		<field name="inherit_id" ref="sale.view_order_form"/>
+		<field name="arch" type="xml">
+			<field name="amount_untaxed" position="before">
+				<field name="amount" />
+				<field name="total_discount" />
+			</field>
+			<xpath expr="//field[@name='order_line']//tree//field[@name='tax_id']" position="after">
+				<field name="tax_amount" />
+				<field name="discount_type" />
+			</xpath>
+			<xpath expr="//field[@name='order_line']//tree//field[@name='tax_id']" position="attributes">
+				<attribute name="string">Tax Rate</attribute>
+			</xpath>
+			<xpath expr="//field[@name='order_line']//tree//field[@name='discount']" position="attributes">
+				<attribute name="string">Discount</attribute>
+			</xpath>
+		</field>
+	</record>
+	<record model="ir.ui.view" id="account_invoice_form_tax">
+		<field name="name">Account Invoice</field>
+		<field name="model">account.invoice</field>
+		<field name="inherit_id" ref="account.invoice_form"/>
+		<field name="arch" type="xml">
+			<data>
+				<field name="date_invoice" position="after">
+					<field name="tax_invoice"/>
+				</field>
+				<xpath expr="//page/field[@name='invoice_line_ids']/tree/field[@name='price_subtotal']"
+					position="after">
+					<field name="price_subtotal_tax" />
+				</xpath>
+				<xpath expr="//page/field[@name='invoice_line_ids']/tree/field[@name='invoice_line_tax_ids']"
+					position="after">
+					<field name="tax_amount" />
+				</xpath>
+				<xpath expr="//page/field[@name='invoice_line_ids']/tree/field[@name='invoice_line_tax_ids']"
+					position="attributes">
+					<attribute name="string">Tax Rate</attribute>
+				</xpath>
+				<xpath expr="//page/field[@name='invoice_line_ids']/tree/field[@name='discount']"
+					position="attributes">
+					<attribute name="string">Discount</attribute>
+				</xpath>
+				<xpath expr="//page/field[@name='invoice_line_ids']/tree/field[@name='discount']"
+					position="before">
+					<field name="discount_type" />
+				</xpath>
+				<xpath expr="//field[@name='amount_untaxed']" position="before">
+					<field name="amount" />
+					<field name="total_discount" />
+				</xpath>
+			</data>
+		</field>
+	</record>
+	<record model="ir.ui.view" id="account_invoice_form_tax_supplier">
+		<field name="name">Account Invoice</field>
+		<field name="model">account.invoice</field>
+		<field name="inherit_id" ref="account.invoice_supplier_form"/>
+		<field name="arch" type="xml">
+			<data>
+				<field name="date_invoice" position="after">
+					<field name="tax_invoice"/>
+				</field>
+				
+				<xpath expr="//page/field[@name='invoice_line_ids']/tree/field[@name='price_subtotal']"
+					position="after">
+					<field name="price_subtotal_tax" />
+				</xpath>
+				<xpath expr="//page/field[@name='invoice_line_ids']/tree/field[@name='invoice_line_tax_ids']"
+					position="after">
+					<field name="tax_amount" />
+				</xpath>
+				<xpath expr="//page/field[@name='invoice_line_ids']/tree/field[@name='invoice_line_tax_ids']"
+					position="attributes">
+					<attribute name="string">Tax Rate</attribute>
+				</xpath>
+				<xpath expr="//page/field[@name='invoice_line_ids']/tree/field[@name='discount']"
+					position="attributes">
+					<attribute name="string">Discount</attribute>
+				</xpath>
+				<xpath expr="//page/field[@name='invoice_line_ids']/tree/field[@name='discount']"
+					position="before">
+					<field name="discount_type" />
+				</xpath>
+				<xpath expr="//field[@name='amount_untaxed']" position="before">
+					<field name="amount" />
+					<field name="total_discount" />
+				</xpath>
+			</data>
+		</field>
+	</record>
+	
+	<record id="inherit_res_partner_form_view" model="ir.ui.view">
+		<field name="name">inherit.res.partner.form.view</field>
+		<field name="model">res.partner</field>
+		<field name="inherit_id" ref="base.view_partner_form">
+		</field>
+		<field name="arch" type="xml">
+			<field name="category_id" position="after">
+				<field name="partner_vat" />
+			</field>
+		</field>
+	</record>
+	
+	
+</odoo>

@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<openerp>
+   <data>
+       <!--Property Stages-->
+       <record id="property_stage1" model="property.stage">
+            <field name="name">Sale</field>
+       </record>
+       <record id="property_stage2" model="property.stage">
+            <field name="name">Available</field>
+            <field name="is_default">True</field>
+       </record>
+       <record id="property_stage3" model="property.stage">
+            <field name="name">On Lease</field>
+       </record>
+       <record id="property_stage4" model="property.stage">
+            <field name="name">Sold</field>
+       </record>
+
+       <!--Property types-->
+       <record id="property_type_demo1" model="property.type">
+            <field name="name">Bungalow</field>
+       </record>
+       <record id="property_type_demo2" model="property.type">
+            <field name="name">Flat</field>
+       </record>
+       <record id="property_type_demo3" model="property.type">
+            <field name="name">Shop</field>
+       </record>
+       <record id="property_type_demo4" model="property.type">
+            <field name="name">Land</field>
+       </record>
+       <record id="property_type_demo5" model="property.type">
+            <field name="name">Apartment</field>
+       </record>
+
+       <!--Rent Types-->
+       <record id="rent_type_demo1" model="rent.type">
+            <field name="name">Monthly</field>
+            <field name="repeat_number">1</field>
+       </record>
+       <record id="rent_type_demo2" model="rent.type">
+            <field name="name">Quarterly</field>
+            <field name="repeat_number">3</field>
+       </record>
+       <record id="rent_type_demo3" model="rent.type">
+            <field name="name">Half yearly</field>
+            <field name="repeat_number">6</field>
+       </record>
+       <record id="rent_type_demo4" model="rent.type">
+            <field name="name">yearly</field>
+            <field name="repeat_number">12</field>
+       </record>
+
+       <!--Room Types-->
+       <record id="room_type_demo1" model="room.type">
+            <field name="name">Bed Room</field>
+       </record>
+       <record id="room_type_demo2" model="room.type">
+            <field name="name">Kitchen</field>
+       </record>
+       <record id="room_type_demo3" model="room.type">
+            <field name="name">Full Bath Shower</field>
+       </record>
+       <record id="room_type_demo4" model="room.type">
+            <field name="name">Half Bath</field>
+       </record>
+
+       <!--Utility Types-->
+       <record id="utility_type_demo1" model="utility.type">
+            <field name="name">Gas Connection</field>
+       </record>
+       <record id="utility_type_demo2" model="utility.type">
+            <field name="name">Air Conditioner</field>
+       </record>
+       <record id="utility_type_demo3" model="utility.type">
+            <field name="name">Electricity</field>
+       </record>
+       <record id="utility_type_demo4" model="utility.type">
+            <field name="name">Elevator</field>
+       </record>
+
+       <!--Maintenance Types-->
+       <record id="maintenance_type_demo1" model="maintenance.type">
+            <field name="name">Gas Connection</field>
+       </record>
+       <record id="maintenance_type_demo2" model="maintenance.type">
+            <field name="name">Air Conditioner</field>
+       </record>
+       <record id="maintenance_type_demo3" model="maintenance.type">
+            <field name="name">Electricity</field>
+       </record>
+       <record id="maintenance_type_demo4" model="maintenance.type">
+            <field name="name">Electronic Items</field>
+       </record>
+       <record id="maintenance_type_demo5" model="maintenance.type">
+            <field name="name">Paint</field>
+       </record>
+
+   </data>
+</openerp>

@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data>
+
+        <record id="view_property_action" model="ir.actions.act_window">
+            <field name="name">Properties</field>
+            <field name="res_model">product.template</field>
+            <field name="view_type">form</field>
+            <!--<field name="view_id" ref="product_property_stage_view"/>-->
+            <field name="view_mode">kanban,tree,form</field>
+        </record>
+
+
+        <record model="ir.ui.view" id="product_property_stage_view">
+            <field name="name">product.template.property.stage.kanban</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_kanban_view" />
+            <field name="act_window_id" ref="view_property_action"/>
+            <field name="priority" eval="20"/>
+            <field name="arch" type="xml">
+				<kanban position="attributes">
+                <attribute name="default_group_by">stage_id</attribute>
+                    <!--<field name="stage_id" options='{"group_by_tooltip": {"requirements": "Description", "legend_priority": "Use of stars"}}'/>-->
+                </kanban>
+                <field name="image_small" position="after">
+                    <field name="stage_id"/>
+                </field>
+            </field>
+        </record>
+
+         <record model="ir.actions.act_window.view" id="act_hr_employee_tree_view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="product_property_stage_view"/>
+            <field name="act_window_id" ref="view_property_action"/>
+        </record>
+
+        <record model="ir.ui.view" id="product_property_form_view2">
+            <field name="name">product.template.property.form2</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="arch" type="xml">
+                <field name="barcode" position="replace"/>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="product_property_form_view">
+            <field name="name">product.template.property.form</field>
+            <field name="model">product.template</field>
+            <field name="act_window_id" ref="view_property_action"/>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="replace">
+                    <form string="Products">
+                        <header>
+                            <button string="Variant Prices" type="action" name="118" attrs="{'invisible': [('product_variant_count', '&lt;=', 1)]}" groups="product.group_product_variant"/>
+                            <field name="stage_id" widget="statusbar"/>
+                        </header>
+                        <sheet>
+                            <field name="product_variant_count" invisible="1"/>
+                            <field name="id" invisible="True"/>
+                            <div class="oe_button_box" name="button_box">
+                                <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                                    <field name="active" widget="boolean_button" options="{&quot;terminology&quot;: &quot;archive&quot;}"/>
+                                </button>
+                                <button class="oe_stat_button" name="website_publish_button" type="object" icon="fa-globe">
+                                    <field name="website_published" widget="website_button"/>
+                                </button>
+                                <!--<button class="oe_stat_button" name="action_view_sales" type="object" icon="fa-usd">-->
+                                    <!--<field string="Sales" name="sales_count" widget="statinfo" />-->
+                               <!--</button>-->
+                               <button name="action_view_contract" type="object" class="oe_stat_button" icon="fa-pencil-square-o">
+                                    <field name="tenancy_count" widget="statinfo" string="Tenancy"/>
+                               </button>
+                            </div>
+                            <field name="image_medium" widget="image" class="oe_avatar"/>
+                            <div class="oe_title">
+                                <label class="oe_edit_only" for="name" string=""/>
+                                <h1><field name="name" placeholder="Product Name"/></h1>
+                                <div name="options" groups="base.group_user">
+                                    <div>
+                                        <field name="property_code"/>
+                                        <field name="grouped"/>
+                                        <label for="grouped"/>
+                                    </div>
+                                    <div>
+                                        <field name="rent_ok"/>
+                                        <label for="rent_ok"/>
+                                    </div>
+                                    <div>
+                                        <field name="sale_ok"/>
+                                        <label for="sale_ok"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <group>
+                                <group>
+                                    <label for="street" string="Address"/>
+                                    <div class="o_address_format">
+                                        <field name="street" placeholder="Street..." class="o_address_street" required="True"/>
+                                        <field name="street2" placeholder="Street 2..." class="o_address_street"/>
+                                        <field name="city_id" placeholder="City" required="True" class="o_address_city"/>
+                                        <field name="state_id" class="o_address_state" placeholder="State" options="{&quot;no_open&quot;: True}" context="{'country_id': country_id, 'zip': zip}"/>
+                                        <field name="zip" placeholder="ZIP" class="o_address_zip"/>
+                                        <field name="country_id" placeholder="Country" required="True" class="o_address_country" options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+                                    </div>
+                                    <field name="property_age" string="Built in"/>
+                                    <field name="area" required="1"/>
+                                    <field name="monthly_rent" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="annual_rent" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="currency_id" readonly="False"/>
+                                </group>
+                                <group>
+                                    <field name="parent_id"  domain="[('grouped', '=', True)]"/>
+                                    <field name="property_type"/>
+                                    <field name="property_manager"/>
+                                    <field name="furnishing"/>
+                                    <field name="bed_rooms"/>
+                                    <field name="bath_rooms"/>
+                                    <field name="garages"/>
+                                    <field name="facing"/>
+                                    <field name="company_id" required="True" options="{'no_create': True}"/>
+                                    <!--<field name="ownership"/>-->
+                                    <!--<field name="condition"/>-->
+                                    <!--<field name="start_date"/>-->
+                                    <!--<field name="end_date"/>-->
+                                </group>
+                            </group>
+                            <notebook>
+                                <page string="Rent &amp; Annual Fees">
+                                    <group string="Annual Fees">
+                                        <group>
+                                            <field name="annual_service_fees" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                            <field name="extra_annual_fees" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                        </group>
+                                        <group>
+                                            <field name="maintenance_annual_fees" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                            <field name="total_annual_fees" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                        </group>
+                                    </group>
+                                    <separator string="Property Rent"/>
+                                        <field name="tenancy_ids" mode="tree">
+                                            <tree>
+                                                <field name="name"/>
+                                                <field name="tenant_id"/>
+                                                <field name="annual_rent"/>
+                                                <field name="cost_frequency"/>
+                                                <field name="brokerage_fees_amount"/>
+                                                <field name="rent_start_date"/>
+                                                <field name="rent_end_date"/>
+                                            </tree>
+                                        </field>
+                                    <group>
+                                        <separator string='Description' colspan="4"/>
+                                        <field name="description_sale" colspan="4" nolabel="1"/>
+                                    </group>
+                                </page>
+                                <page name="sales" invisible="1">
+                                    <group name="description"></group>
+                                </page>
+                                <page string="General Information" name="general_information" invisible="1">
+                                    <group name="email_template_and_project"></group>
+                                    <group name="accounting"></group>
+                                </page>
+                                <page string="General Information">
+                                    <group>
+                                        <group>
+                                            <field name="type"/>
+                                        </group>
+                                        <group>
+                                            <field name="lst_price" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                            <field name="list_price" invisible="1"/>
+                                            <field name="item_ids" invisible="1"/>
+                                            <label for="standard_price" groups="base.group_user"/>
+                                            <div name="standard_price_uom" groups="base.group_user">
+                                                <field name="standard_price" widget="monetary" options="{'currency_field': 'currency_id'}" class="oe_inline"/>
+                                            </div>
+                                            <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                                            <field name="uom_id" groups="product.group_uom" options="{'no_create': True}"/>
+                                            <field name="uom_po_id" groups="product.group_uom" options="{'no_create': True}"/>
+                                            <field name="currency_id" invisible="1"/>
+                                        </group>
+                                    </group>
+                                    <group>
+                                        <group string="Depreciation Information">
+                                            <field name="asset_category_id"/>
+                                            <field name="value" widget="monetary"/>
+                                            <field name="salvage_value" widget="monetary"/>
+                                            <field name="value_residual" widget="monetary"/>
+                                        </group>
+                                        <group>
+                                        </group>
+                                    </group>
+                                </page>
+                                <page string="Depreciation Board">
+                                    <separator string=" "/>
+                                    <button type="object" name="compute_depreciation_board" string="Compute Depreciation" attrs="{'invisible': [('asset_id', '!=', False)]}"/>
+                                    <separator string=" "/>
+                                    <field name="asset_id" attrs="{'invisible': [('asset_id', '=', False)]}"/>
+                                    <field name="depreciation_line_ids" mode="tree" options="{'reload_whole_on_button': true}">
+                                        <tree string="Depreciation Lines" decoration-info="(move_check == False)" create="false">
+                                            <field name="depreciation_date"/>
+                                            <field name="depreciated_value" readonly="1"/>
+                                            <field name="amount" widget="monetary" string="Depreciation"/>
+                                            <field name="remaining_value" readonly="1" widget="monetary" string="Residual"/>
+                                            <field name="move_check" invisible="1"/>
+                                            <field name="move_posted_check" invisible="1"/>
+                                            <field name="parent_state" invisible="1"/>
+                                            <button name="create_move" type="object" widget="widgetonbutton"/>
+                                        </tree>
+                                        <form string="Depreciation Lines">
+                                            <group>
+                                                <group>
+                                                    <field name="parent_state" invisible="1"/>
+                                                    <field name="name"/>
+                                                    <field name="sequence"/>
+                                                    <field name="move_id"/>
+                                                    <field name="move_check"/>
+                                                    <field name="parent_state" invisible="1"/>
+                                                </group>
+                                                <group>
+                                                    <field name="amount" widget="monetary"/>
+                                                    <field name="depreciation_date"/>
+                                                    <field name="depreciated_value"/>
+                                                    <field name="remaining_value"/>
+                                                </group>
+                                            </group>
+                                        </form>
+                                    </field>
+                                </page>
+                                <page string="Sub Properties">
+                                        <field name="property_ids" mode="tree">
+                                            <tree>
+                                                <field name="name"/>
+                                                <field name="property_type"/>
+                                                <field name="asset_category_id"/>
+                                                <field name="value"/>
+                                                <field name="value_residual"/>
+                                                <field name="stage_id"/>
+                                            </tree>
+                                        </field>
+                                </page>
+                                <page string="Accounting">
+                                    <group>
+                                        <group>
+                                            <field name="property_account_income_id"/>
+                                            <field name="property_account_deferred_id"/>
+                                        </group>
+                                        <group>
+                                            <field name="property_account_expense_id"/>
+                                        </group>
+                                    </group>
+                                </page>
+                                <page string="Website">
+                                    <group name="website" string="Website">
+                                        <field name="website_url" invisible="1"/>
+                                        <!--<field name="public_categ_ids" widget="many2many_tags" string="Website Categories"/>-->
+                                        <field name="alternative_product_ids" string="Similar Properties" widget="many2many_tags"/>
+                                    </group>
+                                    <field name="product_image_ids" mode="kanban" context="{'default_name': name, 'default_product_tmpl_id': active_id}">
+                                        <kanban string="Product Images">
+                                            <field name="name"/>
+                                            <field name="image"/>
+                                            <templates>
+                                                <t t-name="kanban-box">
+                                                    <div class="oe_kanban_global_click">
+                                                        <a t-if="!read_only_mode" type="delete" class="fa fa-times pull-right"/>
+                                                        <div class="o_kanban_image">
+                                                            <img t-if="record.image.raw_value" t-att-src="'data:image/png;base64,'+record.image.raw_value"/>
+                                                        </div>
+                                                        <div class="oe_kanban_details">
+                                                            <field name="name"/>
+                                                        </div>
+                                                    </div>
+                                                </t>
+                                            </templates>
+                                        </kanban>
+                                    </field>
+                                </page>
+                            </notebook>
+                        </sheet>
+                        <div class="oe_chatter">
+                            <field name="message_follower_ids" widget="mail_followers"/>
+                            <field name="message_ids" widget="mail_thread"/>
+                        </div>
+                    </form>
+                </xpath>
+        </field>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="act_hr_employee_form_view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="product_property_form_view"/>
+            <field name="act_window_id" ref="view_property_action"/>
+        </record>
+
+
+    <record id="product_stage_search" model="ir.ui.view">
+        <field name="name">Stage - Search</field>
+        <field name="model">property.stage</field>
+        <field name="arch" type="xml">
+            <search string="Stage Search">
+                <field name="name"/>
+                <field name="sequence"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="product_stage_tree" model="ir.ui.view">
+        <field name="name">property.stage.tree</field>
+        <field name="model">property.stage</field>
+        <field name="arch" type="xml">
+            <tree string="Stages">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="is_default"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="product_stage_form" model="ir.ui.view">
+        <field name="name">property.stage.form</field>
+        <field name="model">property.stage</field>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <form string="Stage">
+                <group>
+                    <group>
+                        <field name="name"/>
+                        <field name="fold"/>
+                        <field name="is_default"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="property_stage_action" model="ir.actions.act_window">
+        <field name="name">Stages</field>
+        <field name="res_model">property.stage</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="product_stage_tree"/>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Click to set a new stage in your product pipeline.
+          </p><p>
+            Stages allow to easily track how a specific product
+            is positioned in the sales cycle.
+          </p>
+        </field>
+    </record>
+
+
+
+        <!--Property Hierarchy-->
+        <record id="product_tree_hierarchy" model="ir.ui.view">
+            <field name="name">product.tree.hierarchy</field>
+            <field name="model">product.template</field>
+            <field name="field_parent">property_ids</field>
+            <field name="arch" type="xml">
+                <tree string="Product Hierarchy" toolbar="1" >
+                    <!--<field name="code" context="{'form_view_ref': 'account.view_account_form'}"/>-->
+                    <field name="name"/>
+                    <!--<field name="user_type_id"/>-->
+                    <!--<field name="currency_id" options="{'no_create': True}" groups="base.group_multi_currency"/>-->
+                    <!--<field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>-->
+                </tree>
+            </field>
+        </record>
+
+        <record id="product_hierarchy_action" model="ir.actions.act_window">
+            <field name="name">Product Hierarchy</field>
+            <field name="res_model">product.template</field>
+            <field name="view_type">tree</field>
+            <field name="domain">[('parent_id','=',False)]</field>
+            <field name="view_id" ref="product_tree_hierarchy"/>
+        </record>
+
+        <record model="ir.ui.view" id="property_type_tree_view">
+			<field name="name">property.type.tree.view</field>
+			<field name="model">property.type</field>
+			<field name="priority">10</field>
+			<field name="arch" type="xml">
+				<tree string='Property Type'>
+					<field name="name"/>
+           		</tree>
+			</field>
+		</record>
+
+        <record model="ir.ui.view" id="room_type_tree_view">
+			<field name="name">room.type.tree.view</field>
+			<field name="model">room.type</field>
+			<field name="priority">10</field>
+			<field name="arch" type="xml">
+				<tree string='Room Type'>
+					<field name="name"/>
+           		</tree>
+			</field>
+		</record>
+
+        <record model="ir.ui.view" id="utility_type_tree_view">
+			<field name="name">utility.type.tree.view</field>
+			<field name="model">utility.type</field>
+			<field name="priority">10</field>
+			<field name="arch" type="xml">
+				<tree string='Utility Type'>
+					<field name="name"/>
+           		</tree>
+			</field>
+		</record>
+        <record model="ir.ui.view" id="maintenance_type_tree_view">
+			<field name="name">maintenance.type.tree.view</field>
+			<field name="model">maintenance.type</field>
+			<field name="priority">10</field>
+			<field name="arch" type="xml">
+				<tree string='Maintenance Type'>
+					<field name="name"/>
+           		</tree>
+			</field>
+		</record>
+
+        <!-- ACTIONS -->
+		<record model="ir.actions.act_window" id="action_property_type">
+			<field name="name">Property Type</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">property.type</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="property_type_tree_view"/>
+		</record>
+
+        <record model="ir.actions.act_window" id="action_room_type">
+			<field name="name">Room Type</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">room.type</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="room_type_tree_view"/>
+		</record>
+
+        <record model="ir.actions.act_window" id="action_utility_type">
+			<field name="name">Utility Type</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">utility.type</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="utility_type_tree_view"/>
+		</record>
+        <record model="ir.actions.act_window" id="action_maintenance_type">
+			<field name="name">Maintenance Type</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">maintenance.type</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="maintenance_type_tree_view"/>
+		</record>
+
+    </data>
+</openerp>

@@ -1,0 +1,141 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<odoo>
+
+    <record id="base_config_settings_attendance_inherit" model="ir.ui.view">
+        <field name="name">base.config.settings.attendance.inherit</field>
+        <field name="model">base.config.settings</field>
+        <field name="inherit_id" ref="hr_attendance.hr_attendance_view_config"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//group" position="after">
+                    <group string="Late Limits (Minutes)">
+                        <group>
+                            <field name="late_in_limit"/>
+                            <field name="late_out_limit"/>
+                        </group>
+                        <group></group>
+                    </group>
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+    <!--<record id="hr_employee_attendance_inherit" model="ir.ui.view">-->
+        <!--<field name="name">hr.employee.attendance.inherit</field>-->
+        <!--<field name="model">hr.employee</field>-->
+        <!--<field name="inherit_id" ref="hr_holidays.view_employee_form_leave_inherit"/>-->
+        <!--<field name="arch" type="xml">-->
+            <!--<data>-->
+                <!--<xpath expr="//group[@groups='base.group_no_one']" position="after">-->
+                    <!--<group string="Attendance">-->
+                        <!--&lt;!&ndash;<label for="attend_time"/>&ndash;&gt;-->
+                            <!--<field name="attend_time"/>-->
+                            <!--<field name="leave_time"/>-->
+                            <!--<div>fields should match format 00:00:00</div>-->
+                    <!--</group>-->
+                <!--</xpath>-->
+            <!--</data>-->
+        <!--</field>-->
+    <!--</record>-->
+
+    <record id="hr_attendance_inherit" model="ir.ui.view">
+        <field name="name">hr.attendance.inherit</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.hr_attendance_view_form"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='check_out']" position="after">
+                    <field name="branch_id"/>
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="hr_payslip_form_view">
+            <field name="name">hr_payslip_form_view</field>
+            <field name="model">hr.payslip</field>
+            <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
+            <field name="priority" eval="20"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook/page[1]" position="after">
+                    <page string="Attendances">
+                        <group string="Attendances">
+                            <group>
+                                <field name="late_in_days"/>
+                                <field name="late_out_days"/>
+                            </group>
+                            <group></group>
+                        </group>
+                        <group>
+                            <group string="Leaves">
+                                <field name="unpaid_days"/>
+                            </group>
+                            <group></group>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+    </record>
+
+    <record id="view_hloidays_status_inherit_validations_form" model="ir.ui.view">
+        <field name="name">hr.holidays.status.inherit.validations.form</field>
+        <field name="model">hr.holidays.status</field>
+        <field name="inherit_id" ref="hr_holidays.edit_holiday_status_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='limit']" position="after">
+                    <field name="deduct"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_hr_branch_form" model="ir.ui.view">
+        <field name="name">hr.branch.form</field>
+        <field name="model">hr.branch</field>
+        <field name="arch" type="xml">
+            <form string="Branches">
+                <group>
+                    <group string="Branch Name">
+                            <h2><field name="name"/></h2>
+                    </group>
+                    <group></group>
+                    </group>
+                <group>
+                    <group string="Attendance">
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <div>fields should match format 00:00:00</div>
+                    </group>
+                    <group></group>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="hr_branch_tree_view">
+            <field name="name">hr.branch.tree.view</field>
+            <field name="model">hr.branch</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <tree string='Branches'>
+                    <field name="name"/>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                </tree>
+            </field>
+    </record>
+
+        <!-- ACTIONS -->
+    <record model="ir.actions.act_window" id="action_show_branches">
+			<field name="name">Branches</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">hr.branch</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<!--<field name="view_id" ref="hr_branch_tree_view"/>-->
+    </record>
+    <menuitem name="Branches"
+          action="action_show_branches"
+          id="menu_hr_branches"
+          parent="hr.menu_human_resources_configuration"/>
+
+</odoo>

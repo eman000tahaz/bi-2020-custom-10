@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="invoice_sale_discount_invoice">
+            <field name="name">account.invoice.form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <field name="account_analytic_id" position="replace">
+                    <field name="account_analytic_id" groups="analytic.group_analytic_accounting" domain="[('company_id', '=', parent.company_id)]" required="1"/>
+                </field>
+                <data>
+                    <xpath expr="//field[@name='comment']" position="before">
+                        <group>
+                            <group>
+                                <field name="discount_view" attrs="{'readonly':[('state', 'not in', ['draft', 'proforma','proforma2'])]}"/>
+                                <field name="discount_type" attrs="{'readonly':[('state', 'not in', ['draft', 'proforma','proforma2'])]}"/>
+                            </group>
+                            <group>
+                                <!--<button name="button_dummy" string="(update)" type="object"-->
+                                        <!--class="oe_edit_only oe_link oe_right"/>-->
+                            </group>
+                            <group>
+                                <field name="discount_value" attrs="{'invisible':[('discount_type', 'not in', ['Fixed', 'Percentage'])],'readonly':[('state', 'not in', ['draft', 'proforma','proforma2'])]}"/>
+                                <field name="report_visible" attrs="{'invisible':[('discount_type', 'not in', ['Fixed', 'Percentage'])],'readonly':[('state', 'not in', ['draft', 'proforma','proforma2'])]}"/>
+                            </group>
+                            <group>
+                                <button name="button_dummy" string="(update)" type="object"
+                                        class="oe_edit_only oe_link"
+                                        attrs="{'invisible':[('discount_type', 'not in', ['Fixed', 'Percentage'])],'readonly':[('state', 'not in', ['draft', 'proforma','proforma2'])]}"/>
+                            </group>
+                        </group>
+
+                    </xpath>
+                    <xpath expr="//field[@name='amount_tax']" position="after">
+                        <field name="discounted_amount" widget="monetary" options="{'currency_field': 'currency_id'}"
+                               attrs="{'invisible':[('discount_type', 'not in', ['Fixed', 'Percentage'])]}"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+    </data>
+</openerp>

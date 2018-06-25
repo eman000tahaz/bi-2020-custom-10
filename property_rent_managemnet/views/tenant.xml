@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="res_partner_tenant_view">
+            <field name="name">res.partner.tenant.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form" />
+            <field name="priority" eval="20"/>
+            <field name="arch" type="xml">
+				<xpath expr="//group[@name='sale']" position="replace">
+                    <group string="Sale" name="sale">
+                        <field name="customer" string="is a Tenant"/>
+                        <field name="user_id"/>
+                    </group>
+                </xpath>
+                <xpath expr="//field[@name='email']" position="replace">
+                    <field name="email" widget="email" attrs="{'required': ['|',('customer','=',True),('user_ids','!=', [])]}"/>
+                    <field name="national_id_no" attrs="{'required': [('customer','=',True)],'invisible':[('customer','=',False)]}"/>
+                </xpath>
+                 <xpath expr="//button[@name='toggle_active']" position="after">
+                     <button name="action_view_contract" type="object" class="oe_stat_button" icon="fa-pencil-square-o">
+                        <field name="tenancy_count" widget="statinfo" string="Tenancy"/>
+                     </button>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_tenant_action" model="ir.actions.act_window">
+            <field name="name">Tenants</field>
+            <field name="res_model">res.partner</field>
+            <field name="context">{'default_customer':True}</field>
+            <field name="domain">[('customer','=',True)]</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+        </record>
+
+    </data>
+</openerp>

@@ -1,0 +1,25 @@
+{
+    "name": "Property Management",
+    "summary": "Property, Units, Tenants, Tenancy, Bills, Billing, Payments",
+    "author": "Maha Hamza <mahasaeedhamza@gmail.com>",
+    'depends': ['base', 'sale', 'account', 'analytic','account_asset','website_sale'],
+    "application": True,
+    "installable": True,
+    "category": "Property",
+    "data": [
+        'report/report_contract.xml',
+        'report/contract_views.xml',
+        # 'security/security.xml',
+        # 'security/ir.model.access.csv',
+        'views/property.xml',
+        'views/tenant.xml',
+        'views/tenancy.xml',
+        'views/sale_order.xml',
+        'views/rent_type.xml',
+        'views/property_menuitem.xml',
+        'views/res_city.xml',
+        'data/property_conf.xml',
+        # 'data/contract_cron.xml',
+        'data/mail_template.xml',
+    ]
+}

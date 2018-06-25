@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+		 <record id="purchase_order_line_tree_search1" model="ir.ui.view">
+            <field name="name">purchase.order.line.tree.search1</field>
+            <field name="model">purchase.order.line</field>
+            <field name="type">tree</field>
+            <field name="inherit_id" ref="purchase.purchase_order_line_tree" />
+            <field name="arch" type="xml">
+				<field name="name" position="replace">
+					<field name="name" select="1" />
+				</field>
+                <field name="date_planned" position="after">
+					<field name="invoice_id" string="Invoice"/>
+				</field>
+                <field name="product_qty" position="after">
+                    <!--<field name="outgoing_qty"/>-->
+                    <field name="onhand_qty"/>
+                </field>
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="editable">bottom</attribute>
+                    <attribute name="delete">false</attribute>
+                </xpath>
+			</field>
+		 </record>
+		 
+		  <record id="purchase_order_line_tree_search2" model="ir.ui.view">
+            <field name="name">purchase.order.line.tree.search2</field>
+            <field name="model">purchase.order.line</field>
+            <field name="type">tree</field>
+            <field name="inherit_id" ref="purchase_order_line_tree_search1" />
+            <field name="arch" type="xml">
+				<field name="date_planned" position="replace">
+					<field name="date_planned" select="2" />
+				</field>
+			</field>
+		 </record>
+		
+		  <record id="purchase_order_line_tree_search3" model="ir.ui.view">
+            <field name="name">purchase.order.line.tree.search3</field>
+            <field name="model">purchase.order.line</field>
+            <field name="type">tree</field>
+            <field name="inherit_id" ref="purchase_order_line_tree_search2" />
+            <field name="arch" type="xml">
+				<field name="product_id" position="replace">
+					<field name="product_id" select="2" />
+				</field>
+			</field>
+		 </record>
+
+
+        <record id="purchase_order_line_search_extended" model="ir.ui.view">
+                  <field name="name">purchase.order.line.search.extended</field>
+                  <field name="model">purchase.order.line</field>
+                  <field name="inherit_id" ref="purchase.purchase_order_line_search"/>
+                  <field name="arch" type="xml">
+                    <xpath expr="//search" position="inside">
+                      <!--<filter string="Outgoing Qty &gt; 0" name="outgoing_above_0" domain="[('product_id.outgoing_qty', '>', 0)]"/>-->
+                      <filter string="Onhand Qty = 0" name="onhand_0" domain="[('product_id.qty_available', '=', 0)]"/>
+                    </xpath>
+                  </field>
+        </record>
+
+
+		
+	     <record id="action_order_line_tree1" model="ir.actions.act_window">
+            <field name="name">Purchase Order Lines</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.order.line</field>
+            <field name="view_type">form</field>
+            <field name="domain">[('order_id.invoice_status','!=','invoiced')]</field>
+            <field name="view_id" eval="False"/>
+        </record>
+        <menuitem action="action_order_line_tree1" id="menu_action_order_line_tree1" parent="purchase.menu_procurement_management" sequence="40"/>
+		 
+       <record id="create_invoice_action" model="ir.actions.server">
+            <field name="name">Create Invoice</field>
+           <field name="model_id" ref="model_purchase_order_line"/>
+           <field name="state">code</field>
+           <field name="code">action = env["purchase.order.line"].create_purchase_line_invoice()</field>
+       </record>
+
+       <record id="calculate_payslip_details" model="ir.values">
+           <field eval="'client_action_multi'" name="key2"/>
+           <field eval="'purchase.order.line'" name="model"/>
+           <field name="name">Create Invoice</field>
+           <field eval="'ir.actions.server,%d'%create_invoice_action" name="value"/>
+       </record>
+    </data>
+</openerp>

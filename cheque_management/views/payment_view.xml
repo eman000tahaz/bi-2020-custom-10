@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="cheque_create_form_view" model="ir.ui.view">
+		<field name="name">cheque_create_view</field>
+		<field name="model">account.payment</field>
+		<field name="arch" type="xml">
+			<form string="Receive Cheque">
+				<header>
+					<button name="post" class="oe_highlight" states="draft" string="Confirm" type="object"/>
+					<field name="state" widget="statusbar" statusbar_visible="posted,reconciled"/>
+				</header>
+				<sheet>
+					<div class="oe_title" attrs="{'invisible': [('state', '=', 'draft')]}">
+						<h1>
+							<field name="name"/>
+						</h1>
+					</div>
+					<group>
+						<group>
+							<field name="id" invisible="1"/>
+							<field name="is_cheque" attrs="{'readonly': [('state', '!=', 'draft')]}" required="1"/>
+							<field name="payment_type" invisible="1"
+                                   attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+							<field name="partner_type" invisible="1"
+                                   attrs="{'required': [('payment_type', 'in', ('inbound', 'outbound'))],
+                                   'invisible': [('payment_type', 'not in', ('inbound', 'outbound'))],
+                                   'readonly': [('state', '!=', 'draft')]}"/>
+							<field name="partner_id" attrs="{'required': [('payment_type', 'in', ('inbound', 'outbound'))], 'invisible': [('payment_type', 'not in', ('inbound', 'outbound'))], 'readonly': [('state', '!=', 'draft')]}" context="{'default_is_company': True, 'default_supplier': payment_type == 'outbound', 'default_customer': payment_type == 'inbound'}"/>
+							<field name="partner_vat" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+							<field name="cheque_journal_id"
+                                   domain="[('type', 'in', journal_type),('jrnl_is_cheque','in',journal_cheque_val)]"
+                                   widget="selection" string="Journal" required="1"
+                                   attrs="{'readonly': [('state', '!=', 'draft')],}"/>
+							<field name="journal_id" invisible="1"/>
+							<field name="destination_journal_id" invisible="1"/>
+							<field name="hide_payment_method" invisible="1"/>
+							<field name="payment_method_id" widget="radio"
+                                   attrs="{'invisible': [('hide_payment_method', '=', True)],
+                                   'readonly': [('state', '!=', 'draft')]}"/>
+							<field name="payment_method_code" invisible="1"/>
+						</group>
+						<group>
+							<label for="amount"/>
+							<div name="amount_div" class="o_row">
+								<field name="amount" string="Cheque Amount" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+								<field name="currency_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+							</div>
+							<field name="check_amount_in_words" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+							<field name="payment_date" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+							<field name="communication" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+						</group>
+					</group>
+					<field name="lines_ids" attrs="{'readonly': [('state', '!=', 'draft')],'invisible': [('is_cheque', '=', '2')]}">
+						<tree string="Details" editable="bottom">
+							<field name="cheque_no" />
+							<field name="cheque_bank" />
+							
+							<field name="date" />
+							<field name="cheque_amount" sum="Total"/>
+						</tree>
+					</field>
+					<field name="notes" placeholder = "Description ... "/>
+				</sheet>
+			</form>
+		</field>
+	</record>
+	<record id="cheque_create_tree_view" model="ir.ui.view">
+		<field name="name">Cheque Info</field>
+		<field name="model">account.payment</field>
+		<field name="arch" type="xml">
+			<tree string="Cheque Info">
+				<field name="name"/>
+				<field name="partner_id" />
+				<field name="cheque_no"/>
+				<field name="date" />
+				<field name="amount" />
+				<field name="currency_id"  groups="base.group_multi_currency"/>
+				<field name="state"/>
+			</tree>
+		</field>
+	</record>
+	<record id="cheque_receive_action1" model="ir.actions.act_window">
+		<field name="name">Receipt Voucher</field>
+		<field name="display_name">Receipt Voucher</field>
+		<field name="res_model">account.payment</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+		<field name="domain">[('is_cheque','in',['1','2']),('partner_type', '=', 'customer')]</field>
+		<field name="context">{
+            'default_payment_type':'inbound', 'default_partner_type': 'customer',
+            'journal_type':['general','cash'],
+            'journal_cheque_val':[1],}</field>
+		<field name="help" type="html">
+			<p class="oe_view_nocontent_create">
+			</p>
+		</field>
+	</record>
+	<record id="cheque_receive_action21" model="ir.actions.act_window.view">
+		<field eval="1" name="sequence"/>
+		<field name="view_mode">tree</field>
+		<field name="view_id" ref="cheque_create_tree_view"/>
+		<field name="act_window_id" ref="cheque_receive_action1"/>
+	</record>
+	<record id="cheque_receive_action2" model="ir.actions.act_window.view">
+		<field eval="2" name="sequence"/>
+		<field name="view_mode">form</field>
+		<field name="view_id" ref="cheque_create_form_view"/>
+		<field name="act_window_id" ref="cheque_receive_action1"/>
+	</record>
+	
+	
+	
+	<record id="cheque_send_action1" model="ir.actions.act_window">
+		<field name="name">Payment Voucher</field>
+		<field name="res_model">account.payment</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+		<field name="domain">[('is_cheque','in',['1','2']),('partner_type', '=', 'supplier')]</field>
+		<field name="context">{
+            'default_payment_type':'outbound',
+            'journal_type':['bank'], 'default_partner_type': 'supplier',
+            'journal_cheque_val':[1],}</field>
+		<field name="help" type="html">
+			<p class="oe_view_nocontent_create">
+			</p>
+		</field>
+	</record>
+	<record id="cheque_send_action21" model="ir.actions.act_window.view">
+		<field eval="1" name="sequence"/>
+		<field name="view_mode">tree</field>
+		<field name="view_id" ref="cheque_create_tree_view"/>
+		<field name="act_window_id" ref="cheque_send_action1"/>
+	</record>
+	<record id="cheque_send_action2" model="ir.actions.act_window.view">
+		<field eval="2" name="sequence"/>
+		<field name="view_mode">form</field>
+		<field name="view_id" ref="cheque_create_form_view"/>
+		<field name="act_window_id" ref="cheque_send_action1"/>
+	</record>
+	<menuitem id="menu_cheques" name="Voucher" parent="account.menu_finance" sequence="3"/>
+	<menuitem id="menu_cheques_register" name="Register Voucher" parent="menu_cheques" sequence="1"/>
+	<menuitem id="menu_cheque_receive_action" action="cheque_receive_action1"
+              name="Receipt Voucher" parent="menu_cheques_register" sequence="1"/>
+	
+	<menuitem id="menu_cheque_send_action" action="cheque_send_action1"
+              name="Payment Voucher" parent="menu_cheques_register" sequence="2"/>
+	
+	<record id="cheque_view_tree" model="ir.ui.view">
+		<field name="name">cheque_view_tree</field>
+		<field name="model">account.move.line</field>
+		<field name="arch" type="xml">
+			<tree string="Cheques" create="0" edit="0" delete="0">
+				<field name="cheque_no" readonly="1"/>
+				<field name="cheque_bank" readonly="1"/>
+				<field name="cheque_date" readonly="1"/>
+				<field name="date" readonly="1"/>
+				<field name="move_id" invisible="1"/>
+				<field name="journal_id" readonly="1" options="{&quot;no_open&quot;:True}"/>
+				<field name="name" invisible="1"/>
+				<field name="statement_id" invisible="1"/>
+				<field name="partner_id" readonly="1"/>
+				<field name="ref" readonly="1"/>
+				<field name="account_id" readonly="1" string="Status" domain="[('company_id', '=', company_id)]"/>
+				<field name="analytic_account_id" invisible="1"/>
+				<field name="reconciled" invisible="1"/>
+				<field name="full_reconcile_id" invisible="1"/>
+				<field name="debit" invisible="1"/>
+				<field name="credit" invisible="1"/>
+				<field name="balance" string="Amount" readonly="1"/>
+				<field name="amount_currency" readonly="True" groups="base.group_multi_currency"/>
+				<field name="currency_id" readonly="True" groups="base.group_multi_currency"/>
+				<field name="date_maturity" invisible="1"/>
+				<field name="company_currency_id" invisible="1"/>
+				<field name="company_id" invisible="1"/>
+				<field name="full_reconcile_id"/>
+				<field name="move_id"/>
+			</tree>
+		</field>
+	</record>
+	
+	<record id="cheque_sent_list_action" model="ir.actions.act_window">
+		<field name="name">Payment Voucher</field>
+		<field name="view_ids" eval="[(5, 0, 0),
+      (0, 0, {'view_mode': 'tree', 'view_id': ref('cheque_view_tree')})]"/>
+		<field name="res_model">account.move.line</field>
+		<field name="view_mode">form,tree</field>
+		<field name="context">{}</field>
+		<field name="domain">[
+            ('aml_is_cheque', '=', True), ('credit','&gt;',0.0), 
+            ('payment_id.payment_type','=','outbound'),
+            ]</field>
+		<field name="help" type="html">
+			<p class="oe_view_nocontent_create">
+			</p>
+		</field>
+	</record>
+	
+	<record id="cheque_received_list_action" model="ir.actions.act_window">
+		<field name="name">Receipt Voucher</field>
+		<field name="view_ids" eval="[(5, 0, 0),
+      (0, 0, {'view_mode': 'tree', 'view_id': ref('cheque_view_tree')})]"/>
+		<field name="res_model">account.move.line</field>
+		<field name="view_mode">form,tree</field>
+		<field name="context">{}</field>
+		<field name="domain">[
+            ('aml_is_cheque', '=', True), ('debit','&gt;',0.0),
+            ('payment_id.payment_type','=','inbound'),
+            ]</field>
+		<field name="help" type="html">
+			<p class="oe_view_nocontent_create">
+			</p>
+		</field>
+	</record>
+	
+	<menuitem id="menu_cheques_history" name="Voucher history" parent="menu_cheques" sequence="2"/>
+	<menuitem id="menu_cheque_received_action" action="cheque_received_list_action"
+              name="Receipt Voucher" parent="menu_cheques_history" sequence="1"/>
+	<menuitem id="menu_cheque_sent_action" action="cheque_sent_list_action"
+              name="Payment Voucher" parent="menu_cheques_history" sequence="2"/>
+	
+	<record id="journal_form" model="ir.ui.view">
+		<field name="name">journal_form</field>
+		<field name="model">account.journal</field>
+		<field name="inherit_id" ref="account.view_account_journal_form"/>
+		<field name="arch" type="xml">
+			<field name="type" position="after">
+				<field name="jrnl_is_cheque"/>
+			</field>
+		</field>
+	</record>
+	
+	<!-- <record id="account_move_line_reconcile_writeoff_inherit" model="ir.ui.view"> <field name="name">reconcile</field> <field name="model">account.move.line.reconcile.writeoff</field> <field name="inherit_id" ref="account.account_move_line_reconcile_writeoff"/> <field name="arch" type="xml"> <field name="comment" position="after"> <field name="aml_is_cheque" invisible="1"/> <field name="cheque_no" readonly="1"/> <field name="cheque_bank" readonly="1"/> <field name="cheque_date" readonly="1"/> </field>
+		</field> </record> -->
+	
+	
+	<record id="view_account_payment_form_inherit_notes" model="ir.ui.view">
+		<field name="name">view.account.payment.form.inherit.payment</field>
+		<field name="model">account.payment</field>
+		<field name="inherit_id" ref="account.view_account_payment_form"/>
+		<field name="arch" type="xml">
+			<xpath expr='//group[1]' position="inside">
+				<field name="notes" placeholder = "Description ... " attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+			</xpath>
+			<xpath expr='//group[2]' position="inside">
+				<field name="check_amount_in_words" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+			</xpath>
+		</field>
+	</record>
+	
+	<record id="inherit_res_partner_form_view" model="ir.ui.view">
+		<field name="name">inherit.res.partner.form.view</field>
+		<field name="model">res.partner</field>
+		<field name="inherit_id" ref="base.view_partner_form">
+		</field>
+		<field name="arch" type="xml">
+			<field name="category_id" position="after">
+				<field name="partner_vat" />
+			</field>
+		</field>
+	</record>
+</odoo>

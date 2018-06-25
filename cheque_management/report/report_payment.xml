@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<template id="report_payment_document">
+			<t t-call="report.external_layout">
+				<t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})" />
+				<div class="page">
+					<table width="100%" cellpadding="0" cellspacing="0">
+						<col width="72*"/>
+						<col width="116*"/>
+						<col width="69*"/>
+						<tr valign="top">
+							<td width="28%" style="border: none; padding: 0in">
+								<p>
+									<font face="DejaVu Sans, sans-serif">
+										<font size="3" style="font-size: 13pt">
+											<b>
+												Date:
+												<span t-field="o.date"/>
+											</b>
+										</font>
+									</font>
+								</p>
+							</td>
+							<td width="45%" style="border: none; padding: 0in">
+								<p align="center">
+									<font face="DejaVu Sans, sans-serif">
+										<font size="4" style="font-size: 15pt">
+											<span t-if="o.partner_type=='customer'">
+												<b>Receipt Voucher</b>
+											</span>
+											<span t-if="o.partner_type=='supplier'">
+												<b>Payment Voucher</b>
+											</span>
+										</font>
+									</font>
+								</p>
+							</td>
+							<td width="27%" style="border: none; padding: 0in">
+								<p align="center">
+									<br/>
+									
+								</p>
+							</td>
+						</tr>
+					</table>
+					<p>
+						<br/>
+						<br/>
+						
+					</p>
+					<table width="100%" cellpadding="2" cellspacing="0">
+						<col width="37*"/>
+						<col width="164*"/>
+						<col width="55*"/>
+						<tr valign="top">
+							<td width="14%" style="border: none; padding: 0in">
+								<p>
+									<font face="DejaVu Sans, sans-serif">
+										<font size="3" style="font-size: 13pt">
+											<b>Name:</b>
+										</font>
+									</font>
+								</p>
+							</td>
+							<td width="64%" style="border: none; padding: 0in">
+								<p>
+									<font face="DejaVu Sans, sans-serif">
+										<font size="3" style="font-size: 13pt">
+											<span t-field="o.partner_id.name"/>
+										</font>
+									</font>
+								</p>
+							</td>
+							<td width="21%" style="border: 1px solid #000000; padding: 0.02in">
+								<p align="center">
+									<font face="DejaVu Sans, sans-serif">
+										<font size="3" style="font-size: 13pt">
+											<b>Amount</b>
+										</font>
+									</font>
+								</p>
+							</td>
+						</tr>
+						<tr valign="top">
+							<td width="14%" style="border: none; padding: 0in">
+								<p>
+									<font face="DejaVu Sans, sans-serif">
+										<font size="3" style="font-size: 13pt">
+											<b>Address:</b>
+										</font>
+									</font>
+								</p>
+							</td>
+							<td rowspan="3" width="64%" style="border: none; padding: 0in">
+								<p>
+									<font face="DejaVu Sans, sans-serif">
+										<font size="3" style="font-size: 13pt">
+											<address t-field="o.partner_id" t-options='{"widget": "contact", "fields": ["address"], "no_marker": True}' />
+											<span t-if="o.partner_id.partner_vat">
+												TRN:
+												<span t-field="o.partner_id.partner_vat"/>
+											</span>
+										</font>
+									</font>
+								</p>
+							</td>
+							<td width="21%" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.02in; padding-left: 0.02in; padding-right: 0.02in">
+								<p align="center">
+									<font face="DejaVu Sans, sans-serif">
+										<font size="3" style="font-size: 13pt">
+											<span t-field="o.amount" t-options='{"widget": "monetary", "display_currency": o.currency_id}' />
+										</font>
+									</font>
+								</p>
+							</td>
+						</tr>
+						<tr valign="top">
+							<td rowspan="2" width="14%" style="border: none; padding: 0in">
+								<p>
+									<br/>
+									
+								</p>
+							</td>
+							<td width="21%" style="border: none; padding: 0in">
+								<p align="center">
+									<br/>
+									
+								</p>
+							</td>
+						</tr>
+						<tr valign="top">
+							<td width="21%" style="border: none; padding: 0in">
+								<p>
+									<br/>
+									
+								</p>
+							</td>
+						</tr>
+					</table>
+					<p style="margin-bottom: 0in; line-height: 100%">
+						<br/>
+						
+					</p>
+					<table width="100%" cellpadding="0" cellspacing="0">
+						<col width="256*"/>
+						<tr>
+							<td width="100%" valign="top" style="border: none; padding: 0in">
+								<p>
+									<font face="DejaVu Sans, sans-serif">
+										<font size="3" style="font-size: 13pt">
+											<b>Amount
+			:</b>
+											<span style="font-weight: normal">
+												<span t-field="o.check_amount_in_words"/>
+											</span>
+										</font>
+									</font>
+								</p>
+							</td>
+						</tr>
+					</table>
+					<p style="margin-bottom: 0in; line-height: 100%">
+						<br/>
+						
+					</p>
+					<table width="100%" cellpadding="0" cellspacing="0">
+						<col width="60*"/>
+						<col width="64*"/>
+						<col width="14*"/>
+						<col width="49*"/>
+						<col width="69*"/>
+						<tr valign="top">
+							<td width="24%" style="border: none; padding: 0in">
+								<p>
+									<font face="DejaVu Sans, sans-serif">
+										<font size="3" style="font-size: 13pt">
+											<span t-if="o.is_cheque=='1'">
+												<b>Check Amount:</b>
+											</span>
+											<span t-if="o.is_cheque=='2'">
+												<b>CASH Amount:</b>
+											</span>
+										</font>
+									</font>
+								</p>
+							</td>
+							<td width="25%" style="border: none; padding: 0in">
+								<p>
+									<span t-field="o.amount" t-options='{"widget": "monetary", "display_currency": o.currency_id}' />
+								</p>
+							</td>
+							<td width="5%" style="border: none; padding: 0in">
+								<p>
+									<br/>
+									
+								</p>
+							</td>
+							<!--							<td width="19%" style="border: none; padding: 0in">-->
+							<!--								<p>-->
+							<!--									<font face="DejaVu Sans, sans-serif">-->
+							<!--										<font size="3" style="font-size: 13pt">-->
+							<!--											<span t-if="o.is_cheque=='1'">-->
+							<!--												<b>Bank:</b>-->
+							<!--											</span>-->
+							<!--										</font>-->
+							<!--									</font>-->
+							<!--								</p>-->
+							<!--							</td>-->
+							<!--							<td width="27%" style="border: none; padding: 0in">-->
+							<!--								<p>-->
+							<!--									<span t-if="o.is_cheque=='1'">-->
+							<!--										<span t-field="o.cheque_bank"/>-->
+							<!--									</span>-->
+							<!--								</p>-->
+							<!--							</td>-->
+						</tr>
+						<tr valign="top">
+							<!-- <td width="24%" style="border: none; padding: 0in"> <p> <font face="DejaVu Sans, sans-serif"> <font size="3" style="font-size: 13pt"> <span t-if="o.is_cheque=='1'"> <b>Check Number:</b> </span> </font> </font> </p> </td> <td width="25%" style="border: none; padding: 0in"> <p> <span t-if="o.is_cheque=='1'"> <span t-field="o.cheque_no"/> </span> </p> </td> <td width="5%" style="border: none; padding: 0in"> <p> <br/> </p> </td> -->
+							<td width="19%" style="border: none; padding: 0in">
+								<p>
+									<font face="DejaVu Sans, sans-serif">
+										<font size="3" style="font-size: 13pt">
+											<span t-if="o.is_cheque=='1'">
+												<b>Check Date:</b>
+											</span>
+										</font>
+									</font>
+								</p>
+							</td>
+							<td width="27%" style="border: none; padding: 0in">
+								<p>
+									<span t-if="o.is_cheque=='1'">
+										<span t-field="o.payment_date"/>
+									</span>
+								</p>
+							</td>
+						</tr>
+					</table>
+					<span t-if="o.lines_ids">
+						<table class="table table-condensed">
+							<thead>
+								<tr>
+									<th>Cheque No</th>
+									<th>Cheque Bank</th>
+									<th>Date</th>
+									<th>Amount</th>
+								</tr>
+							</thead>
+							<tbody class="invoice_tbody">
+								<tr t-foreach="o.lines_ids" t-as="l">
+									<td>
+										<span t-field="l.cheque_no"/>
+									</td>
+									<td>
+										<span t-field="l.cheque_bank"/>
+									</td>
+									<td>
+										<span t-field="l.date"/>
+									</td>
+									<td>
+										<span t-field="l.cheque_amount" t-options='{"widget": "monetary", "display_currency": o.currency_id}' />
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</span>
+					<table>
+						<tr valign="top">
+							<td width="24%" style="border: none; padding: 0in">
+								<p>
+									<font face="DejaVu Sans, sans-serif">
+										<font size="3" style="font-size: 13pt">
+											<b>Description:</b>
+										</font>
+									</font>
+								</p>
+							</td>
+							<td width="76%" style="border: none; padding: 0in">
+								<p>
+									<span t-field="o.notes"/>
+								</p>
+							</td>
+						</tr>
+					</table>
+					<p style="margin-bottom: 0in; border-top: none; border-bottom: 1.00pt solid #000000; border-left: none; border-right: none; padding-top: 0in; padding-bottom: 0.03in; padding-left: 0in; padding-right: 0in; line-height: 100%">
+						<br/>
+						
+					</p>
+					<p style="margin-bottom: 0in; line-height: 100%">
+						<br/>
+						
+					</p>
+					<p style="margin-bottom: 0in; line-height: 100%">
+						<br/>
+						
+					</p>
+					<p style="margin-bottom: 0in; line-height: 100%">
+						<br/>
+						
+					</p>
+					<p style="margin-bottom: 0in; line-height: 100%">
+						<br/>
+						
+					</p>
+					<table width="100%" cellpadding="0" cellspacing="0">
+						<col width="85*"/>
+						<col width="85*"/>
+						<col width="85*"/>
+						<tr valign="top">
+							<td width="33%" style="border: none; padding: 0in">
+								<p>
+									<b>Prepared By:........................</b>
+								</p>
+							</td>
+							<td width="33%" style="border: none; padding: 0in">
+								<p>
+									<b>Approved By:........................</b>
+								</p>
+							</td>
+							<td width="33%" style="border: none; padding: 0in">
+								<p>
+									<b>Received By:........................</b>
+								</p>
+							</td>
+						</tr>
+					</table>
+					<p style="margin-bottom: 0in; line-height: 100%">
+						<br/>
+						
+					</p>
+					
+					
+				</div>
+			</t>
+		</template>
+		
+		<template id="report_payment">
+			<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="o">
+					<t t-call="cheque_management.report_payment_document" t-lang="o.partner_id.lang"/>
+				</t>
+			</t>
+		</template>
+		<report 
+            id="account_payment"
+            model="account.payment"
+            string="Voucher"
+            report_type="qweb-pdf"
+            name="cheque_management.report_payment"
+            file="cheque_management.report_payment"
+        />
+		
+		<template id="report.external_layout_header">
+			<div class="header">
+				<div class="row">
+					<div class="col-xs-3">
+						<img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="max-height:
+							45px;"/>
+					</div>
+					<div class="col-xs-9 text-right" style="margin-top:20px;" t-field="company.rml_header1"/>
+				</div>
+				<!--<div class="row zero_min_height">
+					<div class="col-xs-12">
+						<div style="border-bottom: 1px solid black;">
+						</div>
+					</div>
+				</div>-->
+				<div class="row">
+					<div class="col-xs-7" name="company_address">
+						<span t-field="company.partner_id" t-field-options='{"widget": "contact", "fields":
+							["address", "name","vat"], "no_marker": true}' />
+					</div>
+					<div class="col-xs-7" name="company_address">
+						<span t-if="company.vat" style="max-height:150px;border-bottom: 1px solid black; display:inline-block;">
+							TRN:
+							<span t-field="company.vat"/>
+						</span>
+					</div>
+				</div>
+			</div>
+		</template>
+		
+		<record id="report.paperformat_euro" model="report.paperformat">
+			<field name="name">European A4</field>
+			<field name="default" eval="True" />
+			<field name="format">A4</field>
+			<field name="page_height">0</field>
+			<field name="page_width">0</field>
+			<field name="orientation">Portrait</field>
+			<field name="margin_top">45</field>
+			<field name="margin_bottom">30</field>
+			<field name="margin_left">7</field>
+			<field name="margin_right">7</field>
+			<field name="header_line" eval="False" />
+			<field name="header_spacing">45</field>
+			<field name="dpi">90</field>
+		</record>
+		<record id="cheque_management.account_payment"  model="ir.actions.report.xml">
+			<field name="paperformat_id" ref="report.paperformat_euro"/>
+		</record>
+		
+	</data>
+</odoo>

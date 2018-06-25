@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <record id="defat_sequence_account_invoice_form_view" model="ir.ui.view">
+      <field name="name">draft_sequence_invoice_form_view</field>
+      <field name="model">account.invoice</field>
+      <field name="inherit_id" ref="account.invoice_form"/>
+      <field name="arch" type="xml">
+          <xpath expr="//h1[@class='mt0']" position="replace">
+              <h1 class="mt0">
+                  <!--<label string="Draft Invoice" attrs="{'invisible': ['|',('state','not in',('draft',)), ('type','&lt;&gt;','out_invoice')]}"/>-->
+                  <!--<label string="Draft Refund" attrs="{'invisible': [('type','&lt;&gt;','out_refund')]}"/>-->
+                  <field name="number" readonly="1" class="oe_inline"/>
+              </h1>
+          </xpath>
+          <button name="action_invoice_open" position="replace">
+              <button name="action_invoice_open" type="object" states="draft" string="Validate" class="oe_highlight" groups="account.group_account_manager"/>
+              <button name="action_invoice_open" type="object" states="proforma2" string="Validate" groups="account.group_account_manager"/>
+          </button>
+      </field>
+    </record>
+</odoo>

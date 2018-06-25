@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data noupdate="1">
+        <record id="sequence_contract_rental" model="ir.sequence">
+            <field name="name">Contract Rental Sequence</field>
+            <field name="code">contract.rental.sequence</field>
+            <field name="prefix">RENT/%(range_year)s/</field>
+            <field eval="1" name="number_next"/>
+            <field eval="1" name="number_increment"/>
+            <field eval="True" name="use_date_range"/>
+            <field name="padding">4</field>
+        </record>
+    </data>
+    <data>
+
+    <record id="view_tenancy_form" model="ir.ui.view">
+        <field name="name">rental.tenancy.form</field>
+        <field name="model">rental.tenancy</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_contract_send" type="object" string="Send by Email" groups="base.group_user" class="btn-primary"/>
+                    <button name="action_contract_cancel" type="object" string="Cancel" attrs="{'invisible':[('state','=','cancel')]}"/>
+                    <button name="action_contract_reset" type="object" string="Reset" attrs="{'invisible':[('state','!=','cancel')]}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,running,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_right oe_button_box" style="width: 300px;" name="buttons">
+                        <field name="is_scheduled" invisible="1"/>
+                        <button name="action_view_invoices"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-pencil-square-o"
+                            attrs="{'invisible': [('invoice_count', '=', 0)]}">
+                            <field name="invoice_count" widget="statinfo" string="Invoices"/>
+                        </button>
+                        <button name='action_schedule' string="Run Schedule" type="object" icon="fa-plus" attrs="{'invisible': ['|',('is_scheduled','=',True),('state', '!=', 'running')]}" class="oe_stat_button"/>
+                        <button name="action_confirm" string="Start" type="object" icon="fa-play" attrs="{'invisible': [('state', '!=', 'draft')]}" class="oe_stat_button"/>
+                        <button name="set_to_done" string="Close" states="running" type="object" icon="fa-times" attrs="{'invisible': [('state', '!=', 'running')]}" class="oe_stat_button"/>
+                    </div>
+                    <field name="image" widget='image' class="oe_avatar"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group style="background-color:rgb(230, 255, 230);">
+                      <group>
+                          <field name="property_id" attrs="{'readonly': [('state','!=','draft')]}"/>
+                          <field name="reference"/>
+                      </group>
+                      <group>
+                          <field name="tenant_id"  string="Tenant" domain="[('customer', '=', True)]" attrs="{'readonly': [('state','!=','draft')]}"/>
+                          <field name="company_id"/>
+                      </group>
+                    </group>
+                    <group style="background-color:rgb(255, 255, 230);">
+                        <group>
+                            <field name="annual_rent" attrs="{'readonly': [('state','!=','draft')]}"/>
+                            <field name="annual_cleaning_fees" attrs="{'readonly': [('state','!=','draft')]}"/>
+                            <field name="brokerage_fees" attrs="{'readonly': [('state','!=','draft')]}"/>
+                            <field name="total_fees"/>
+                        </group>
+                        <group>
+                            <field name="annual_service_fees" attrs="{'readonly': [('state','!=','draft')]}"/>
+                            <field name="extra_annual_fees" attrs="{'readonly': [('state','!=','draft')]}"/>
+                            <field name="brokerage_fees_amount" attrs="{'readonly': [('state','!=','draft')]}"/>
+                            <field name="total_rent"/>
+                        </group>
+                    </group>
+                    <group style="background-color:rgb(255, 230, 230);">
+                        <group>
+                            <field name="cost_frequency" attrs="{'readonly': [('state','!=','draft')]}"/>
+                            <field name="rent_start_date" attrs="{'readonly': [('state','!=','draft')]}"/>
+                            <field name="first_payment_date" attrs="{'readonly': [('state','!=','draft')]}"/>
+                        </group>
+                        <group>
+                            <field name="period" attrs="{'readonly': [('state','!=','draft')]}"/>
+                            <field name="rent_end_date" attrs="{'readonly': [('state','!=','draft')]}"/>
+                            <field name="journal_id" attrs="{'readonly': [('state','!=','draft')]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Rent Schedule">
+                            <field name="recurring_line" mode="tree">
+                                <tree editable="bottom" decoration-info="is_posted == False" colors="green:is_posted == True;">
+                                    <field name="schedule_date"/>
+                                    <field name="recurring_amount"/>
+                                    <field name="cheque_detail"/>
+                                    <field name="assign_to"/>
+                                    <field name="is_posted"/>
+                                    <field name="notes"/>
+                                    <field name="payment_info"/>
+                                    <button name="create_journal_entry" type="object" icon="fa fa-gears" attrs="{'invisible':[('journal_entry_id','!=', False)]}" />
+                                    <button name="pay_amount" type="object" icon="fa fa-money" attrs="{'invisible':['|',('journal_entry_id','=',False),('payment_entry_id','!=', False)]}" />
+                                    <field name="journal_entry_id" icon="fa fa-external-link" attrs="{'invisible':[('journal_entry_id','=', False)]}" />
+                                    <field name="payment_entry_id" icon="fa fa-external-link" attrs="{'invisible':[('payment_entry_id','=', False)]}" />
+                                    <!--<button name="button_payment_entry" type="object" icon="fa fa-money" attrs="{'invisible':[('journal_entry_id','=', False)]}"/>-->
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Contract Information">
+                            <group>
+                                <field name="attachment_ids"  widget="many2many_binary" class="oe_inline"/>
+                            </group>
+                            <separator string="Terms and Conditions"/>
+                            <field name="notes"/>
+                        </page>
+                        <!--<page string="Journal Items">-->
+                            <!--<group>-->
+                                <!--<field name="journal_entry_id" readonly="1"/>-->
+                            <!--</group>-->
+                            <!--<separator string=" "/>-->
+                            <!--<separator string="Journal Items"/>-->
+                            <!--<field name="journal_item_ids" readonly="1"/>-->
+                        <!--</page>-->
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_tenancy_tree">
+        <field name="name">rental.tenancy.tree</field>
+        <field name="model">rental.tenancy</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree decoration-info="state == 'draft'" colors="grey:state == 'done';
+                          green:state == 'running';red:state == 'cancel';">
+                <field name="name"/>
+                <field name="tenant_id" string="Tenant"/>
+                <field name="property_id" string="Property" create = "True"/>
+                <!--<field name="cost"/>-->
+                <field name="rent_start_date"/>
+                <field name="rent_end_date"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_tenancy_action" model="ir.actions.act_window">
+        <field name="name">Tenancy</field>
+        <field name="res_model">rental.tenancy</field>
+        <field name="view_type">form</field>
+        <field name="domain">[('sales_person','=', uid)]</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <record model="ir.ui.view" id="view_tenancy_schedule_tree">
+        <field name="name">rent.tenancy.schedule.tree</field>
+        <field name="model">rent.schedule</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="schedule_date"/>
+                <field name="recurring_amount"/>
+                <field name="cheque_detail"/>
+                <field name="assign_to"/>
+                <field name="is_posted"/>
+                <field name="notes"/>
+                <field name="payment_info"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_tenancy_schedule_calendar">
+        <field name="name">rent.tenancy.schedule.calendar</field>
+        <field name="model">rent.schedule</field>
+        <field name="type">calendar</field>
+        <field name="arch" type="xml">
+           <calendar color="payment_info" date_start="schedule_date" string="Rent Schedule">
+                <field name="tenant_id"/>
+                <field name="property_id"/>
+                <field name="recurring_amount" widget="monetary"/>
+                <field name="assign_to"/>
+                <field name="notes"/>
+                <field name="payment_info"/>
+           </calendar>
+        </field>
+    </record>
+
+    <record id="view_tenancy_schedule_action" model="ir.actions.act_window">
+        <field name="name">Tenancy Rent Schedule</field>
+        <field name="res_model">rent.schedule</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">calendar,tree,form</field>
+    </record>
+
+    </data>
+</openerp>

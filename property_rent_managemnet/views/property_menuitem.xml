@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <menuitem id="property_mgt_root" name="Property Management"/>
+        <menuitem id="property_mgt" name="Property" parent="property_mgt_root" sequence="1"/>
+        <menuitem id="property_conf" name="Configration" parent="property_mgt_root" sequence="3"/>
+
+        <menuitem id="property_item" name="Property" sequence="1" parent="property_mgt" action="view_property_action"/>
+        <menuitem id="property_tenant" name="Tenant Details" sequence="2" parent="property_mgt" action="view_tenant_action"/>
+        <menuitem id="property_tenancy" name="Tenancy" sequence="3" parent="property_mgt" action="view_tenancy_action"/>
+        <menuitem id="property_tenancy_schedule" name="Tenancy Rent Schedule" sequence="4" parent="property_mgt" action="view_tenancy_schedule_action"/>
+        <menuitem id="property_hierarchy" name="Asset Hierarchy" sequence="5" parent="property_mgt" action="product_hierarchy_action"/>
+
+        <menuitem id="property_stage" name="Property Stages" sequence="0" parent="property_conf" action="property_stage_action"/>
+        <menuitem id="property_types" name="Types" sequence="2" parent="property_conf"/>
+
+        <menuitem id="property_type" name="Property Type" sequence="1" parent="property_types" action="action_property_type"/>
+        <menuitem id="rent_type" name="Rent Type" sequence="2" parent="property_types" action="action_rent_type"/>
+        <menuitem id="room_type" name="Room Type" sequence="3" parent="property_types" action="action_room_type"/>
+        <menuitem id="utility_type" name="Utility Type" sequence="4" parent="property_types" action="action_utility_type"/>
+        <menuitem id="maintenance_type" name="Maintenance Type" sequence="5" parent="property_types" action="action_maintenance_type"/>
+
+        <menuitem id="rental_tasks" name="Tasks" parent="property_mgt_root" sequence="7"/>
+
+    </data>
+</openerp>
