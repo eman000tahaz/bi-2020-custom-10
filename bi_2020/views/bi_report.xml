@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- QWeb Reports -->
+        <report 
+            id="account_bank_statement"
+            model="account.bank.statement"
+            string="Statements"
+            report_type="qweb-pdf"
+            name="bi_2020.report_account_bank_statement"
+            file="bi_2020.report_account_bank_statement"
+            attachment_use="True"
+            attachment="(object.state in ('open','paid')) and ('INV'+(object.number or '').replace('/','')+'.pdf')"
+        />
+    </data>
+</odoo>

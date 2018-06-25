@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data noupdate="1">
+        <record id="sequence_account_bank_statement" model="ir.sequence">
+            <field name="name">Account Bank Statement Sequence</field>
+            <field name="code">Account.Bank.sequence</field>
+            <field name="prefix">SO</field>
+            <field eval="1" name="number_next"/>
+            <field eval="1" name="number_increment"/>
+            <field name="padding">5</field>
+        </record>
+    </data>
+    <data>
+    	<record id="view_bank_statement_form_inherit" model="ir.ui.view">
+            <field name="name">account.bank.statement.form</field>
+            <field name="model">account.bank.statement</field>
+            <field name="inherit_id" ref="account.view_bank_statement_form"/>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+            	<xpath expr="//div" position="after">
+            		<field name="image" widget='image' class="oe_avatar"/>
+            	</xpath>
+            	<xpath expr="//group" position="before">
+            		<group>
+            			<field name="state_type" widget="radio" options="{'horizontal': true}"/>
+            		</group>
+            	</xpath>
+            	<field name='company_id' position="replace">
+            		<field name="company_id"/>
+            	</field>
+            	<field name="line_ids" position="replace">
+            		<field name="line_ids" context="{'date':date}">
+                        <tree editable="bottom" string="Statement lines" decoration-muted="journal_entry_ids">
+                            <field name="sequence"  widget="handle"/>
+                            <field name="journal_entry_ids" invisible="1"/>
+                            <field name="date" attrs="{'readonly' : [('journal_entry_ids', '!=', [])] }"/>
+                            <field name="name" attrs="{'readonly' : [('journal_entry_ids', '!=', [])] }"/>
+                            <field name="partner_id" domain="['|',('parent_id','=',False),('is_company','=',True)]"
+                                 context="{'default_supplier': 1}"
+                                 attrs="{'readonly' : [('journal_entry_ids', '!=', [])] }"/>
+                            <field name="ref" attrs="{'readonly' : [('journal_entry_ids', '!=', [])] }" groups="base.group_no_one"/>
+                            <field name="check_no"/>
+                            <field name="bank_id"/>
+                            <field name="due_date"/>
+                            <field name="amount" attrs="{'readonly' : [('journal_entry_ids', '!=', [])] }"/>
+                            <field name="journal_currency_id" invisible="1"/>
+                            <field name="amount_currency" invisible="1" attrs="{'readonly' : [('journal_entry_ids', '!=', [])] }"/>
+                            <field name="currency_id" options="{'no_create': True}" invisible="1" attrs="{'readonly' : [('journal_entry_ids', '!=', [])] }"/>
+                            <field name="bank_account_id" invisible="1" attrs="{'readonly' : [('journal_entry_ids', '!=', [])] }"
+                                domain="['|', ('partner_id', '=', partner_id), ('partner_id', '=', False)]"/>
+                        </tree>
+                    </field>
+            	</field>
+            	<field name="balance_end" position="after">
+            		<field name="b_total"/>
+            	</field>
+            </field>
+        </record>
+	</data>
+</odoo>
